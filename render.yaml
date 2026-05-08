@@ -1,0 +1,54 @@
+# Render.com Deployment Configuration
+# Earthquake Prediction API
+
+services:
+  # FastAPI Backend Service
+  - type: web
+    name: earthquake-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: WORKERS
+        value: 1
+      - key: DATABASE_URL
+        value: sqlite:///./earthquake_data.db
+      - key: CORS_ORIGINS
+        value: https://earthquake-api.onrender.com,https://www.earthquake-api.onrender.com
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FETCH_INTERVAL_SECONDS
+        value: 300
+      - key: LOG_LEVEL
+        value: info
+    disk:
+      name: earthquake-data
+      mountPath: /app/data
+      sizeGB: 1
+
+  # PostgreSQL Database (Optional - for production)
+  - type: pserv
+    name: earthquake-db
+    runtime: image
+    image:
+      url: postgres:15
+    plan: free
+    envVars:
+      - key: POSTGRES_DB
+        value: earthquake_db
+      - key: POSTGRES_USER
+        value: postgres
+      - key: POSTGRES_PASSWORD
+        generateValue: true
+    disk:
+      name: postgres-data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
