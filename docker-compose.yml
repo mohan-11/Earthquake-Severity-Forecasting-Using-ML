@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  earthquake-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=false
+      - HOST=0.0.0.0
+      - PORT=8000
+      - WORKERS=4
+      - DATABASE_URL=sqlite:///./earthquake_data.db
+      - CORS_ORIGINS=*
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./earthquake_data.db:/app/earthquake_data.db
+      - ./earthquake_model.pkl:/app/earthquake_model.pkl
+      - ./label_encoder.pkl:/app/label_encoder.pkl
+      - ./location_kmeans.pkl:/app/location_kmeans.pkl
+      - ./depth_encoder.pkl:/app/depth_encoder.pkl
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
