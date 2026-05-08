@@ -62,20 +62,27 @@ Predict earthquake severity using Machine Learning, visualize seismic activity i
 ✔ Region-Based Forecasting
 ✔ Historical Data Visualization
 ```
-
-## 🌍 System Workflow
+## 🌍 System Architecture
 
 ```mermaid
 graph TD
     A[Earthquake Dataset] --> B[Data Preprocessing]
     B --> C[Feature Engineering]
-    C --> D[Machine Learning Model]
-    D --> E[Prediction API]
-    E --> F[FastAPI Backend]
-    F --> G[React Frontend]
-    G --> H[Real-Time Dashboard]
-```
+    C --> D[ML Model Training]
+    D --> E[Trained ML Models]
 
+    E --> F[FastAPI Backend]
+
+    F --> G[Prediction API]
+    F --> H[Alert System]
+    F --> I[Analytics Engine]
+
+    G --> J[React Frontend Dashboard]
+    H --> J
+    I --> J
+
+    J --> K[End Users]
+```
 ---
 
 # 🏗️ Tech Stack
